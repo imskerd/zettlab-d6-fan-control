@@ -19,9 +19,9 @@ DEST_MODULE_LOCATION[0]="/extra"
 AUTOINSTALL="yes"
 EOF
 
-dkms add -m zettlab-d6-fans -v 1.0 || true
-dkms build -m zettlab-d6-fans -v 1.0
-dkms install -m zettlab-d6-fans -v 1.0
+dkms add -m zettlab-d6-fans -v 1.0 2>/dev/null || true
+dkms build -m zettlab-d6-fans -v 1.0 2>/dev/null || true
+dkms install -m zettlab-d6-fans -v 1.0 2>/dev/null || true
 
 modprobe zettlab_d8_fans
 
