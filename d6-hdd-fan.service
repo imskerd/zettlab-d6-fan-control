@@ -1,0 +1,12 @@
+[Unit]
+Description=D6 HDD Fan Control
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/d6-hdd-fan.sh
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
