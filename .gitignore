@@ -1,0 +1,7 @@
+# Ignore build files
+*.o
+*.ko
+*.mod
+*.cmd
+*.order
+Module.symvers

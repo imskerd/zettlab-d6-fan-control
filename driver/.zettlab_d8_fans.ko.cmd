@@ -1,1 +1,0 @@
-savedcmd_zettlab_d8_fans.ko := ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T /usr/src/linux-headers-6.17.13-2-pve/scripts/module.lds -o zettlab_d8_fans.ko zettlab_d8_fans.o zettlab_d8_fans.mod.o .module-common.o
