@@ -15,7 +15,7 @@ Custom fan control for Zettlab D6 Ultra using HDD temperatures.
 ## Install
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/zettlab-d6-fan-control.git
+git clone https://github.com/imskerd/zettlab-d6-fan-control.git
 cd zettlab-d6-fan-control
 chmod +x install.sh
 sudo ./install.sh
