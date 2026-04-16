@@ -1,32 +1,38 @@
 #!/bin/bash
-
 set -e
 
 echo "Installing Zettlab fan control..."
 
-# Build module
-cd zettlab-d8-fans
-make clean
-make
+# Install dependencies
+apt update
+apt install -y dkms build-essential smartmontools
 
-# Install module
-cp zettlab_d8_fans.ko /lib/modules/$(uname -r)/
-depmod
+# Install DKMS driver
+mkdir -p /usr/src/zettlab-d6-fans-1.0
+cp -r driver/* /usr/src/zettlab-d6-fans-1.0/
 
-# Enable module on boot
-grep -qxF 'zettlab_d8_fans' /etc/modules || echo 'zettlab_d8_fans' >> /etc/modules
+cat <<EOF > /usr/src/zettlab-d6-fans-1.0/dkms.conf
+PACKAGE_NAME="zettlab-d6-fans"
+PACKAGE_VERSION="1.0"
+BUILT_MODULE_NAME[0]="zettlab_d8_fans"
+DEST_MODULE_LOCATION[0]="/extra"
+AUTOINSTALL="yes"
+EOF
 
-# Copy script
-cp ../d6-hdd-fan.sh /usr/local/bin/
+dkms add -m zettlab-d6-fans -v 1.0 || true
+dkms build -m zettlab-d6-fans -v 1.0
+dkms install -m zettlab-d6-fans -v 1.0
+
+modprobe zettlab_d8_fans
+
+# Install script
+cp d6-hdd-fan.sh /usr/local/bin/
 chmod +x /usr/local/bin/d6-hdd-fan.sh
 
-# Copy service
-cp ../d6-hdd-fan.service /etc/systemd/system/
-
-# Enable + start service
-systemctl daemon-reexec
+# Install service
+cp d6-hdd-fan.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable d6-hdd-fan.service
 systemctl restart d6-hdd-fan.service
 
-echo "Done."
+echo "Installation complete."
