@@ -1,40 +1,86 @@
-# Zettlab D6 Fan Control (Proxmox / Linux)
+# Zettlab D6 Fan Control
 
-Custom fan control for Zettlab D6 Ultra using HDD temperatures.
+Fan control for Zettlab D6 Ultra using HDD temperatures on Proxmox/Linux.
+
+---
 
 ## Features
-- HDD-based fan control (SMART temps)
-- Automatic PWM scaling
+
+- HDD temperature-based fan control
+- Automatic fan speed scaling
 - Systemd service (runs on boot)
-- Kernel module for fan access
+- DKMS support (auto rebuild on kernel updates)
 
-## Requirements
-- Debian / Proxmox
-- smartmontools
+---
 
+## Installation
 
-## Credits
+### Option 1: One-line install (recommended)
 
-Fan control driver based on the Zettlab D8 project:
+sudo apt update && sudo apt install -y git && git clone https://github.com/imskerd/zettlab-d6-fan-control.git && cd zettlab-d6-fan-control && chmod +x install.sh && sudo ./install.sh
 
-https://github.com/Haveacry/zettlab-d8-fans
+---
 
-Originally developed by Dean Holland.
+### Option 2: One-line install (no git required)
 
-Tested and confirmed working on Zettlab D6 Ultra.
+curl -fsSL https://raw.githubusercontent.com/imskerd/zettlab-d6-fan-control/main/install-online.sh | sudo bash
 
+---
 
+### Step-by-step install
 
-## Install
-
-```bash
 git clone https://github.com/imskerd/zettlab-d6-fan-control.git
 cd zettlab-d6-fan-control
 chmod +x install.sh
 sudo ./install.sh
 
+The installer will automatically install required dependencies:
+- dkms
+- build-essential
+- smartmontools
+
+---
+
+## Quick Test
+
+After installation, run:
+
+ls /sys/class/hwmon/*/pwm*
+
+If you see pwm1 and pwm2, the fan driver is working.
+
+Check the service:
+
+systemctl status d6-hdd-fan.service
+
+It should show:
+active (running)
+
+---
+
+## How It Works
+
+- Reads HDD temperatures using smartctl
+- Finds the highest temperature across all drives
+- Maps temperature to fan speed (PWM)
+- Writes fan speed to the system hardware controller
+- Runs continuously via systemd
+
+---
 
 ## Notes
-- If your system updates to a new kernel, rerun:
-  make clean && make
-  and reinstall the module
+
+- This project uses DKMS, so the fan driver will automatically rebuild on kernel updates.
+- No manual recompilation is required.
+- Designed for Zettlab D6 Ultra, but may work on similar models using the same controller.
+
+---
+
+## Credits
+
+Fan control driver based on the Zettlab D8 project:
+https://github.com/Haveacry/zettlab-d8-fans
+
+Originally developed by Dean Holland.
+
+Tested and confirmed working on Zettlab D6 Ultra.
