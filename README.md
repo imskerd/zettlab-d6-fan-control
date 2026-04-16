@@ -12,6 +12,19 @@ Custom fan control for Zettlab D6 Ultra using HDD temperatures.
 - Debian / Proxmox
 - smartmontools
 
+
+## Credits
+
+Fan control driver based on the Zettlab D8 project:
+
+https://github.com/Haveacry/zettlab-d8-fans
+
+Originally developed by Dean Holland.
+
+Tested and confirmed working on Zettlab D6 Ultra.
+
+
+
 ## Install
 
 ```bash
